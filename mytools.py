@@ -6,7 +6,6 @@ import matplotlib.pyplot as plt
 # 绘图设置
 plt.rcParams["font.sans-serif"] = ["SimHei"]  # 设置字体
 
-# 读取SPSS格式数据
 
 
 def 绘制单个类别变量柱状图(数据表, 变量: str):
