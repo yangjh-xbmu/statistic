@@ -2,10 +2,32 @@
 import pandas as pd
 from pyreadstat import pyreadstat
 import matplotlib.pyplot as plt
+from scipy import stats
 
 # 绘图设置
 plt.rcParams["font.sans-serif"] = ["SimHei"]  # 设置字体
 
+
+def 计算单变量均值的置信区间(数据表路径及文件名, 变量名, 置信水平=0.95):
+    """ 计算指定数据表中数值变量的均值及在指定置信水平下的置信区间 """
+
+    # 打开数据文件
+    file_path = 数据表路径及文件名
+    df = pd.read_csv(file_path)
+    # 计算均值和标准误差
+    mean = df[变量名].mean()
+    std_error = stats.sem(df[变量名])
+    # 设定置信水平
+    confidence_level = 置信水平
+    # 设定自由度
+    自由度 = len(df[变量名]) - 1
+    # 计算置信区间
+    confidence_interval = stats.t.interval(
+        confidence_level, 自由度, loc=mean, scale=std_error)
+    # 输出结果
+    print(F"变量{变量名}均值：{mean: .2f}")
+    print(F"均值在置信水平{confidence_level}下的置信区间为：", confidence_interval)
+    return mean, confidence_interval
 
 
 def 绘制单个类别变量柱状图(数据表, 变量: str):
