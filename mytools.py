@@ -242,7 +242,7 @@ def 两个数值变量的统计分析(数据表, 自变量, 因变量):
     y = 数据表[因变量]
     r, p = stats.pearsonr(x, y)
 
-    fig = px.scatter(数据表, x="22、对于新事物，我喜欢去尝试和体验", y="总分", trendline='ols')
+    fig = px.scatter(数据表, x, y, trendline='ols')
     fig.show()
 
     print(FR"决定系数r平方：{r*r :0.4f}")
