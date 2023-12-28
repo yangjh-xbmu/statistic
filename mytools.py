@@ -11,6 +11,15 @@ import plotly.express as px
 plt.rcParams["font.sans-serif"] = ["SimHei"]  # 设置字体
 
 
+def 使用标准差判断数值变量异常值(数据表, 数值变量):
+    mean = 数据表[数值变量].mean()
+    std = 数据表[数值变量].std()
+    condition1 = (数据表[数值变量] < mean - 3 * std) | (数据表[数值变量] > mean + 3 * std)
+    # 识别异常值
+    outliers1 = 数据表[condition1]
+    print('使用标准差判断的异常值为：', outliers1)
+
+
 def 计算单变量均值的置信区间(数据表路径及文件名, 变量名, 置信水平=0.95):
     """ 计算指定数据表中数值变量的均值及在指定置信水平下的置信区间 """
 
@@ -186,14 +195,6 @@ def goodmanKruska_tau_y(df, x: str, y: str) -> float:
     tau_y = (E_1 - E_2) / E_1
 
     return tau_y
-
-
-def 有序变量描述统计函数(表名, 变量名):
-    result = 表名[变量名].value_counts(sort=False)
-    描述统计表 = pd.DataFrame(result)
-    描述统计表['比例'] = 描述统计表['count'] / 描述统计表['count'].sum()
-    描述统计表['累计比例'] = 描述统计表['比例'].cumsum()
-    return 描述统计表
 
 
 def 绘制柱状图(表名):
