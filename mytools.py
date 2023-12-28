@@ -11,6 +11,13 @@ import plotly.express as px
 plt.rcParams["font.sans-serif"] = ["SimHei"]  # 设置字体
 
 
+def 使用plotly绘制类别变量柱状图(数据表, 类别变量):
+    temp = 数据表[类别变量].value_counts().reset_index()
+    fig = px.bar(temp, x=类别变量, y='count', labels={'count': '数量'})
+    # 显示图表
+    fig.show()
+
+
 def 使用标准差判断数值变量异常值(数据表, 数值变量):
     mean = 数据表[数值变量].mean()
     std = 数据表[数值变量].std()
@@ -164,39 +171,6 @@ def 相关系数判断(系数: int):
         return '极弱相关或无相关'
 
 
-def goodmanKruska_tau_y(df, x: str, y: str) -> float:
-    """
-    计算两个定类变量的goodmanKruska_tau_y相关系数
-
-    df：包含定类变量的数据框
-    x：数据框中作为自变量的定类变量名称
-    y: 数据框中作为因变量的定类变量名称
-
-    函数返回tau_y相关系数
-    """
-
-    cft = pd.crosstab(df[y], df[x], margins=True)
-    """ 取得全部个案数目 """
-    n = cft.at['All', 'All']
-    """ 初始化变量 """
-    E_1 = E_2 = tau_y = 0
-
-    """ 计算E_1 """
-    for i in range(cft.shape[0] - 1):
-        F_y = cft['All'][i]
-        E_1 += ((n - F_y) * F_y) / n
-    """ 计算E_2 """
-    for j in range(cft.shape[1] - 1):
-        for k in range(cft.shape[0] - 1):
-            F_x = cft.iloc[cft.shape[0] - 1, j]
-            f = cft.iloc[k, j]
-            E_2 += ((F_x - f) * f) / F_x
-    """ 计算tauy """
-    tau_y = (E_1 - E_2) / E_1
-
-    return tau_y
-
-
 def 绘制柱状图(表名):
     x = 表名.index
     y = 表名['count'].values
@@ -297,3 +271,4 @@ def 类别变量与数值变量统计分析(数据表, 类别变量, 数值变�
     model = ols(F'{数值变量} ~ {类别变量}', 数据表).fit()
 
     print(F"相关比率：{model.rsquared}")
+    print(相关比率强弱判断(model.rsquared))
